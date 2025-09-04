@@ -5,6 +5,10 @@ import { generate } from "./utils";
 import path from "path"
 import { getAllFiles } from "./file";
 import { uploadFile } from "./cloudflare";
+import { createClient } from "redis";
+
+const publisher = createClient();
+publisher.connect();
 
 
 const app = express();
@@ -27,6 +31,9 @@ app.post("/deploy",async (req,res) => {
         await Promise.all(
             files.map(file => uploadFile(file.slice(__dirname.length + 1), file))
         );
+
+        publisher.lPush("build-queue", id);
+
         res.json({ id });
     } catch (error) {
         console.error('Error uploading files:', error);

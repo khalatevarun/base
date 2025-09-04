@@ -41,3 +41,10 @@ amazon global accelerator
 
 amazon global network
 # base
+
+
+
+# learnings
+1. aws sdk can be used for cloudfare object storage as well. smart move by cloudflare haha
+2. using the queues service from reddis. SQS is similar to it, offered by AWS.
+
