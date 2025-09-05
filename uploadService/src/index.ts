@@ -1,11 +1,10 @@
 import express from "express";
 import cors from "cors";
 import simpleGit from "simple-git";
-import { generate } from "./utils";
 import path from "path"
-import { getAllFiles } from "./file";
-import { uploadFile } from "./cloudflare";
+import { uploadFile } from "./utils/aws";
 import { createClient } from "redis";
+import { generate, getAllFiles } from "./utils/helper";
 
 const publisher = createClient();
 publisher.connect();
@@ -35,7 +34,7 @@ app.post("/deploy",async (req,res) => {
         );
 
         publisher.lPush("build-queue", id);
-        publisher.hSet("status",id,"uploaded"); // hset - sed to set value, like db
+        publisher.hSet("status",id,"uploaded"); // hset - used to set value, uses hashset
 
 
         res.json({ id });

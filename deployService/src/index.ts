@@ -1,6 +1,6 @@
 import { createClient } from "redis";
-import { copyFinalDist, downloadS3Folder } from './cloudflare';
-import { buildProject } from "./utils";
+import { copyFinalDist, downloadS3Folder } from './utils/aws';
+import { buildProject } from "./utils/helper";
 
 const subscriber = createClient();
 subscriber.connect();

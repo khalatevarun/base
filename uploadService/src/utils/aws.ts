@@ -1,5 +1,3 @@
-//fileName => output/12312/src/App.jsx
-//filePath => /Users/varunk/base/dist/output/12312/src/App.jsx
 import fs from 'fs';
 import path from 'path';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
@@ -7,7 +5,6 @@ import dotenv from 'dotenv';
 
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
-console.log(process.env.ACCOUNT_ENDPOINT);
 const s3 = new S3Client({
     region: 'auto',
     endpoint: process.env.ACCOUNT_ENDPOINT,
