@@ -49,7 +49,7 @@ amazon global network
 2. using the queues service from reddis. SQS is similar to it, offered by AWS.
 3. child process in nodejs to run commands like npm install, npm run build
 4. pipe the express response efficiently send the file content directly from s3 to the user without storing it in the server memory. Greate way to server large files or binary data in Nodejs.
-
+5. in redis you cannot use the same client to get data and set date, you need to create separate clients for that.
 
 
 

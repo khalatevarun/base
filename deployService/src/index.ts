@@ -5,6 +5,9 @@ import { buildProject } from "./utils";
 const subscriber = createClient();
 subscriber.connect();
 
+const publisher = createClient();
+publisher.connect();
+
 async function main(){
     while(true){
         const response = await subscriber.rPop('build-queue');
@@ -14,6 +17,7 @@ async function main(){
             await downloadS3Folder(`output/${id}`);
             await buildProject(id);
             await copyFinalDist(id);
+            publisher.hSet("status", id, "deployed");
         } else {
             await new Promise(res => setTimeout(res, 1000));
         }
