@@ -23,7 +23,7 @@ app.get("/*", async (req, res) => {
     try {
         const command = new GetObjectCommand({
             Bucket: "base",
-            Key: `dist/${id}${filePath}`
+            Key: `builds/${id}${filePath}`
         });
         const contents = await s3.send(command);
         const type = filePath.endsWith("html") ? "text/html" :

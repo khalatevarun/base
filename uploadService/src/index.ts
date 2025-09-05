@@ -22,9 +22,9 @@ app.use(express.json());
 app.post("/deploy",async (req,res) => {
     const repoUrl = req.body.repoUrl;
     const id = generate();
-    await simpleGit().clone(repoUrl, path.join(__dirname,`./output/${id}`));
+    await simpleGit().clone(repoUrl, path.join(__dirname,`./repos/${id}`));
 
-    const files  = getAllFiles(path.join(__dirname, `output/${id}`));
+    const files  = getAllFiles(path.join(__dirname, `repos/${id}`));
 
     console.log("Files", files);
 

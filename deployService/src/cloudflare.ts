@@ -82,10 +82,10 @@ export async function uploadFile(fileName: string, filePath: string) {
 }
 
 export async function copyFinalDist(id: string) {
-    const folderPath = path.join(__dirname, `output/${id}/dist`);
+    const folderPath = path.join(__dirname, `repos/${id}/dist`);
     const allFiles = getAllFiles(folderPath);
     for (const file of allFiles) {
         const relativePath = file.slice(folderPath.length + 1);
-        await uploadFile(`dist/${id}/${relativePath}`, file);
+        await uploadFile(`builds/${id}/${relativePath}`, file);
     }
 }
