@@ -47,4 +47,10 @@ amazon global network
 # learnings
 1. aws sdk can be used for cloudfare object storage as well. smart move by cloudflare haha
 2. using the queues service from reddis. SQS is similar to it, offered by AWS.
+3. child process in nodejs to run commands like npm install, npm run build
+4. pipe the express response efficiently send the file content directly from s3 to the user without storing it in the server memory. Greate way to server large files or binary data in Nodejs.
+
+
+
+
 
