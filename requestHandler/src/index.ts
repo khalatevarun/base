@@ -8,12 +8,14 @@ dotenv.config({ path: path.resolve(__dirname, '../.env') });
 const app = express();
 
 const s3 = new S3Client({
-    region: 'auto',
     endpoint: process.env.ACCOUNT_ENDPOINT,
     credentials: {
         accessKeyId: process.env.ACCOUNT_ACCESS_ID || '',
         secretAccessKey: process.env.ACCOUNT_SECRET_KEY || '',
     },
+    forcePathStyle: true,
+    // Required settings for Cloudflare R2
+    maxAttempts: 1
 });
 
 app.get("/*", async (req, res) => {
@@ -23,7 +25,7 @@ app.get("/*", async (req, res) => {
     try {
         const command = new GetObjectCommand({
             Bucket: "base",
-            Key: `builds/${id}${filePath}`
+            Key: `builds/${id}/${filePath.replace(/^\//, '')}`
         });
         const contents = await s3.send(command);
         const type = filePath.endsWith("html") ? "text/html" :
