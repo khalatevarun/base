@@ -56,62 +56,39 @@ Request Handler
 -sdk
 3. Serve the build files to the user
 
+Challenges
+1. Generating a deployment link that is accessible on the internet:
+Problem Currently once the project is build and the build files are stored in r2, a link is generated - id.base.com. For testing purposes and local develoepment, I go to the /etc/hosts files and map the id.base.com to localhost. To make it available on the internet, I need to buy a domain and map it to my server. 
+
+
+# Enhancements:
+
+## Containerizing the build process:
+### Why?
+- Isolation: running npm install / build inside a container prevents arbitrary repo code from touching host files/processes or system-wide packages.
+
+- Risks in the current version: Executes builds on host: untrusted code runs with host privileges.
+
+## Containerized build notes (migration summary)
+
+Replaced host builds with containerized builds; few challenges faced and lessons learned in this transition:
+
+- Engine mismatch (node version) inside container
+  - Some projects required a newer Node engine (e.g. Node 20). Fixed by changing the builder image to a compatible Node image (configurable via `BUILDER_IMAGE`).
+
+- npm EACCES on cache folder (`/.npm`) inside container
+  - NPM attempted to write to a root-owned cache directory when the container ran as a non-root user, causing EACCES errors.
+
+- Solution implemented
+  - Set environment variables inside the container so npm uses a writable directory in the mounted workdir:
+    - `HOME=/work`
+    - `npm_config_cache=/work/.npm`
+  - Run the build with `npm ci --cache /work/.npm && npm run build` and map the host UID:GID into the container (`--user UID:GID`) so created files have correct ownership.
+
+These changes made containerized builds reproducible and prevented permission issues while keeping the build isolation benefits.
 
 
 
-
-# Building Vercel
-
-3 phases
-
-1. Upload phase
-2. Deployment phase
-3. Request phase
-
-
-## Upload phase
-
-Take the github url from the user, download the code and store it in a db
-
-
-
-AWS Tech Required
-
-1. S3 - Cloud Object Storage
-2. Amazon Simple Queue Service
-3.
-
-
-## Deployment Phase
-
-Build the project and store it in db. As in convert React project to HTML/CSS/JS
-
-
-AWS Tech Used
-
-S3
-
-Simple Queue Service
-
-EC2 instances by AWS Fargate
-
-
-# Request Phase
-
-
-amazon global accelerator
-
-amazon global network
-# base
-
-
-
-# learnings
-1. aws sdk can be used for cloudfare object storage as well. smart move by cloudflare haha
-2. using the queues service from reddis. SQS is similar to it, offered by AWS.
-3. child process in nodejs to run commands like npm install, npm run build
-4. pipe the express response efficiently send the file content directly from s3 to the user without storing it in the server memory. Greate way to server large files or binary data in Nodejs.
-5. in redis you cannot use the same client to get data and set date, you need to create separate clients for that.
 
 
 

@@ -1,1 +1,1 @@
-{"root":["./src/index.ts","./src/utils/aws.ts","./src/utils/helper.ts"],"version":"5.7.2"}
+{"root":["./src/aws.ts","./src/helper.ts","./src/index.ts"],"version":"5.7.2"}
