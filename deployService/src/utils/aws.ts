@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import fs from 'fs';
 import type { ListObjectsV2CommandOutput } from '@aws-sdk/client-s3';
 
-dotenv.config({ path: path.resolve(__dirname, '../.env') });
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 const s3 = new S3Client({
     region: 'auto',

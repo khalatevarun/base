@@ -46,7 +46,7 @@ app.post("/deploy",async (req,res) => {
 
 app.get("/status", async (req, res) => {
     const id = req.query.id;
-    const response = await subscribe.hGet("stauts", id as string);
+    const response = await subscribe.hGet("status", id as string);
     res.json({
         status: response
     });
