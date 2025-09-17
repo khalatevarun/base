@@ -5,6 +5,20 @@ While I have been hearing that frontend engineering is dead in the AI era, I sti
 
 Here is the log of my learnings and the architecture I am building.
 
+## 🎨 New Feature: AI Image Editing with Gemini API
+
+Base now includes integrated AI-powered image analysis and editing guidance using Google's Gemini API. See [GEMINI_IMAGE_API.md](./GEMINI_IMAGE_API.md) for detailed documentation.
+
+**Key Features:**
+- **Image Analysis:** Get detailed AI insights about your images
+- **Edit Instructions:** Receive professional editing guidance based on your requirements  
+- **Modern UI:** Clean, intuitive interface with real-time previews
+- **Multiple Formats:** Support for JPG, PNG, GIF, WebP (up to 10MB)
+
+**API Endpoints:**
+- `POST /image/analyze` - Analyze image content and composition
+- `POST /image/edit` - Get detailed editing instructions based on user requirements
+
 # Overview
 We can break the whole process into 5 steps
 

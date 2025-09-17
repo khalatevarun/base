@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './App.css';
+import { ImageEditor } from './ImageEditor';
 
 const API_URL = 'http://localhost:3000'; // Change if needed
 
@@ -9,6 +10,7 @@ function App() {
   const [status, setStatus] = useState('');
   const [loading, setLoading] = useState(false);
   const [deployedUrl, setDeployedUrl] = useState('');
+  const [currentView, setCurrentView] = useState<'deploy' | 'imageEdit'>('deploy');
 
   const handleDeploy = async () => {
     setLoading(true);
@@ -56,28 +58,59 @@ function App() {
     }
   };
 
+  if (currentView === 'imageEdit') {
+    return <ImageEditor onBack={() => setCurrentView('deploy')} />;
+  }
+
   return (
     <div style={{ 
-      maxWidth: 600, 
-      margin: '40px auto', 
-      padding: 32, 
-      border: '1px solid #eee', 
-      borderRadius: 12, 
-      fontFamily: 'system-ui, -apple-system, sans-serif',
-      boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
+      minHeight: '100vh',
+      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      padding: '40px 20px',
+      fontFamily: 'system-ui, -apple-system, sans-serif'
     }}>
-      <h1 style={{ margin: '0 0 16px 0', color: '#ffffff', fontWeight: 700, fontSize: '32px' }}>Instant App Deployment</h1>
-      
-      <p style={{ 
-        color: '#e1e1e1', 
-        lineHeight: '1.5', 
-        fontSize: '16px',
-        margin: '0 0 24px 0' 
+      <div style={{ 
+        maxWidth: 600, 
+        margin: '0 auto', 
+        padding: 32, 
+        background: 'rgba(255, 255, 255, 0.95)',
+        borderRadius: 16, 
+        boxShadow: '0 8px 32px rgba(0,0,0,0.1)'
       }}>
-        Deploy your React applications instantly from GitHub. Simply paste your repository URL below 
-        and we'll handle the build and deployment process for you. Your app will be live in minutes 
-        with its own unique URL.
-      </p>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+          <h1 style={{ margin: 0, color: '#1f2937', fontWeight: 700, fontSize: '32px' }}>Base Platform</h1>
+          <button
+            onClick={() => setCurrentView('imageEdit')}
+            style={{
+              background: '#8b5cf6',
+              color: 'white',
+              border: 'none',
+              padding: '8px 16px',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              fontSize: '14px',
+              fontWeight: 500
+            }}
+          >
+            🎨 AI Image Editor
+          </button>
+        </div>
+
+        <div style={{ marginBottom: '32px' }}>
+          <h2 style={{ margin: '0 0 16px 0', color: '#1f2937', fontWeight: 600, fontSize: '24px' }}>
+            Instant App Deployment
+          </h2>
+          <p style={{ 
+            color: '#6b7280', 
+            lineHeight: '1.5', 
+            fontSize: '16px',
+            margin: '0 0 24px 0' 
+          }}>
+            Deploy your React applications instantly from GitHub. Simply paste your repository URL below 
+            and we'll handle the build and deployment process for you. Your app will be live in minutes 
+            with its own unique URL.
+          </p>
+        </div>
 
       <div style={{ marginBottom: 24 }}>
         <input
@@ -118,10 +151,11 @@ function App() {
         <div style={{ 
           marginTop: 24,
           padding: 16,
-          backgroundColor: '#f7f7f7',
-          borderRadius: 6 
+          backgroundColor: '#f3f4f6',
+          borderRadius: 8,
+          border: '1px solid #e5e7eb'
         }}>
-          <div style={{ marginBottom: deployedUrl ? 12 : 0 }}>
+          <div style={{ marginBottom: deployedUrl ? 12 : 0, color: '#374151' }}>
             Status: <b>{status}</b>
           </div>
           {deployedUrl && (
@@ -131,7 +165,7 @@ function App() {
                 target="_blank" 
                 rel="noopener noreferrer"
                 style={{
-                  color: '#0070f3',
+                  color: '#3b82f6',
                   textDecoration: 'none',
                   fontWeight: 500
                 }}
@@ -142,6 +176,7 @@ function App() {
           )}
         </div>
       )}
+      </div>
     </div>
   );
 }
