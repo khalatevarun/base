@@ -12,6 +12,7 @@ Base takes a GitHub repository URL and serves your React application on a public
 
 ## System Design Overview
 
+![](./systemdesign.png)
 
 The architecture breaks down into three main services working together:
 
