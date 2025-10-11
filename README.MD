@@ -1,118 +1,91 @@
-# Building Base - A platform to build and deploy React projects
-
-This is my attempt to build a platform like Vercel from scratch using cloud services.
-While I have been hearing that frontend engineering is dead in the AI era, I still believe that there is a lot of concepts apart from just building a UI. I want to learn all the peripheral concepts around frontend engineering. My intention is to understand how the CI/CD works, how the deployment works and how the code reaches the end user. While system design preparation is also important, since I am looking for a job, I think building a project is the best way to learn. I now understand how granted we take these services for. 
-
-Here is the log of my learnings and the architecture I am building.
-
-# Overview
-We can break the whole process into 5 steps
-
-1. Get the github url of the project from the user
-2. Clone the github repo on our server and store it in a db
-3. Build the project and store the build files in the db
-4. Once the build files are ready, share a url with the user where the code is hosted
-5. When user hits the url, serve the build files from the db
-
-# Architecture
-To achieve this, I am using the following architecture
-
-## Services
-1. Upload Service - To get the github url from the user, clone the repo and store it in db
-2. Deploy Service - To build the project and store the build files in db
-3. Requestion Handler - To serve the build files from the db when user hits the url
-
-## Database
-
-1. Cloudflare R2 - To store the code and build files
-2. Redis - To manage the queues and store the status of each deployment
-
-## Libraries Used
-1. simple-git - To clone the github repo
-2. child_process - To run the build commands
-3. express - To create the api endpoints
-4. redis - To interact with redis db
-5. aws-sdk - To interact with cloudflare r2 db
 
 
-Upload Service
-1. Get the github url from the user
-2. Clone the repo using simple-git
-3. Upload the code to cloudflare r2 using aws-sdk
-4. Push a message to redis queue 
-5. Update the status of the deployment in redis db
-6. Return the deployment id to the user
+## How Base Works
 
-Deploy Service
-1. Listen to the redis queue for new deployments
-2. Download the code from cloudflare r2 using aws-sdk
-3. Run the build commands using child_process
-4. Upload the build files to cloudflare r2 using aws-sdk
-5. Update the status of the deployment in redis db
+Base takes a GitHub repository URL and serves your React application on a public URL. The deployment pipeline:
 
-Request Handler
-1. Get the deployment id from the user
-2. Download the build files from cloudflare r2 using aws
--sdk
-3. Serve the build files to the user
+1. Get the GitHub URL from the user
+2. Clone the repo and store it in cloud storage
+3. Build the project and store build files
+4. Serve the application on a public URL
+5. Handle incoming requests and serve build files
+
+## System Design Overview
 
 
+The architecture breaks down into three main services working together:
 
+**Upload Service** -> **Deploy Service** -> **Request Handler**
 
+Each service has a specific responsibility and communicates through Redis queues, making the system scalable and fault-tolerant.
 
-# Building Vercel
+## Architecture & Services
 
-3 phases
+### Upload Service
+The entry point for new deployments. Handles repository ingestion and initial processing.
 
-1. Upload phase
-2. Deployment phase
-3. Request phase
+**What it does:**
+- Receives GitHub URL from user
+- Clones repository using `simple-git`
+- Uploads source code to Cloudflare R2 storage
+- Pushes deployment job to Redis queue
+- Updates deployment status in Redis
+- Returns deployment ID to user
 
+**Libraries used:**
+- `simple-git` - Git operations and repository cloning
+- `express` - API endpoints and request handling
+- `aws-sdk` - Cloudflare R2 storage interactions
+- `redis` - Queue management and status updates
 
-## Upload phase
+### Deploy Service
+The build engine that processes queued deployments and generates production assets.
 
-Take the github url from the user, download the code and store it in a db
+**What it does:**
+- Listens to Redis queue for new deployments
+- Downloads source code from Cloudflare R2
+- Runs build commands using `child_process`
+- Uploads generated build files to R2 storage
+- Updates deployment status in Redis
 
+**Libraries used:**
+- `child_process` - Execute build commands (npm install, npm run build)
+- `aws-sdk` - Download source and upload build artifacts
+- `redis` - Queue processing and status management
 
+### Request Handler
+The serving layer that delivers built applications to end users.
 
-AWS Tech Required
+**What it does:**
+- Receives requests with deployment ID
+- Downloads build files from Cloudflare R2
+- Serves static files to users
+- Handles routing for single-page applications
 
-1. S3 - Cloud Object Storage
-2. Amazon Simple Queue Service
-3.
+**Libraries used:**
+- `express` - HTTP server and routing
+- `aws-sdk` - Retrieve build files from storage
 
+## Tech Stack
 
-## Deployment Phase
+**Backend Services:** Node.js with Express
+**Storage:** Cloudflare R2 (S3-compatible object storage)
+**Queue Management:** Redis
+**Version Control:** Git integration via simple-git
+**Build Process:** Native Node.js child_process
 
-Build the project and store it in db. As in convert React project to HTML/CSS/JS
+## Database Strategy
 
+**Cloudflare R2**
+- Stores source code after cloning
+- Stores build artifacts for serving
+- Provides S3-compatible API for seamless integration
 
-AWS Tech Used
+**Redis**
+- Manages deployment queues between services
+- Stores deployment status and metadata
+- Enables real-time status updates
 
-S3
+## Why I Built This
 
-Simple Queue Service
-
-EC2 instances by AWS Fargate
-
-
-# Request Phase
-
-
-amazon global accelerator
-
-amazon global network
-# base
-
-
-
-# learnings
-1. aws sdk can be used for cloudfare object storage as well. smart move by cloudflare haha
-2. using the queues service from reddis. SQS is similar to it, offered by AWS.
-3. child process in nodejs to run commands like npm install, npm run build
-4. pipe the express response efficiently send the file content directly from s3 to the user without storing it in the server memory. Greate way to server large files or binary data in Nodejs.
-5. in redis you cannot use the same client to get data and set date, you need to create separate clients for that.
-
-
-
-
+Building this platform taught me how much we take services like Vercel for granted. While frontend engineering evolves with AI, I wanted to understand the peripheral concepts - how CI/CD works, how deployment happens, and how code reaches end users. Every component was built to understand the fundamental concepts behind modern deployment platforms.
