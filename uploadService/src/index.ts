@@ -6,10 +6,12 @@ import { uploadFile } from "./utils/aws";
 import { createClient } from "redis";
 import { generate, getAllFiles } from "./utils/helper";
 
-const publisher = createClient();
+// Create Redis clients using REDIS_URL if provided, otherwise point to the compose service name `redis`
+const redisUrl = process.env.REDIS_URL || 'redis://redis:6379';
+const publisher = createClient({ url: redisUrl });
 publisher.connect();
 
-const subscribe  = createClient();
+const subscribe  = createClient({ url: redisUrl });
 subscribe.connect();
 
 
