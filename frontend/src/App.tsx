@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import './App.css';
 
-const API_URL = 'http://localhost:3000'; // Change if needed
+const API_URL = import.meta.env.VITE_UPLOAD_URL ?? 'http://localhost:3000'; // Change if needed
 
 function App() {
   const [repoUrl, setRepoUrl] = useState('');
