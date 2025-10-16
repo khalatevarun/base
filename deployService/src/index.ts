@@ -2,6 +2,7 @@ import { createClient } from "redis";
 import { copyFinalDist, downloadS3Folder } from './utils/aws';
 import { buildProject } from "./utils/helper";
 import express from 'express';
+
 const app = express();
 const port = process.env.PORT ? Number(process.env.PORT) : 3000;
 
