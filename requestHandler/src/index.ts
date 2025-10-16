@@ -13,9 +13,7 @@ const s3 = new S3Client({
         accessKeyId: process.env.ACCOUNT_ACCESS_ID || '',
         secretAccessKey: process.env.ACCOUNT_SECRET_KEY || '',
     },
-    forcePathStyle: true,
-    // Required settings for Cloudflare R2
-    maxAttempts: 1
+    region: 'auto',
 });
 
 app.get("/*", async (req, res) => {
